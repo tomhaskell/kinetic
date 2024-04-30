@@ -4,10 +4,10 @@ import { racingSansOne } from './fonts';
 
 export default function NavBar() {
   return (
-    <nav class="w-full bg-gray-800">
-      <div class="mx-auto px-4 sm:px-6">
-        <div class="relative flex h-16 items-center justify-between">
-          <div class="justify-left flex flex-1 items-center">
+    <nav className="w-full bg-slate-800">
+      <div className="mx-auto px-4 sm:px-6">
+        <div className="relative flex h-16 items-center justify-between">
+          <div className="justify-left flex flex-1 items-center">
             <div
               className={`${racingSansOne.className} flex flex-shrink-0 text-4xl antialiased`}
             >
@@ -16,7 +16,7 @@ export default function NavBar() {
           </div>
         </div>
       </div>
-      <div class="absolute inset-y-0 right-0">
+      <div className="absolute inset-y-0 right-0">
         <User />
       </div>
     </nav>
