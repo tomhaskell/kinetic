@@ -8,6 +8,8 @@ export default function User() {
 
   console.debug(user);
 
+  function login() {}
+
   function viewOnStrava() {
     location.href = `https://www.strava.com/athletes/${user.id}`;
   }
@@ -33,7 +35,7 @@ export default function User() {
     );
   } else {
     userButton = (
-      <button>
+      <button onClick={login}>
         <Image
           src="/btn_strava_connectwith_orange.png"
           width={193}

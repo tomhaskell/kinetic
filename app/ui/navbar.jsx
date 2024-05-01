@@ -1,24 +1,15 @@
 import Image from 'next/image';
 import User from './user';
 import { racingSansOne } from './fonts';
+import { Navbar, Typography } from '@material-tailwind/react';
 
-export default function NavBar() {
+export default function AppNavbar() {
   return (
-    <nav className="w-full bg-slate-800">
-      <div className="mx-auto px-4 sm:px-6">
-        <div className="relative flex h-16 items-center justify-between">
-          <div className="justify-left flex flex-1 items-center">
-            <div
-              className={`${racingSansOne.className} flex flex-shrink-0 text-4xl antialiased`}
-            >
-              Kinetic
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="absolute inset-y-0 right-0">
-        <User />
-      </div>
-    </nav>
+    <Navbar className="container mx-0 flex h-16 w-full max-w-full items-center justify-between rounded-none border-none bg-slate-800 px-4 sm:px-6">
+      <Typography className={`${racingSansOne.className} text-4xl antialiased`}>
+        Kinetic
+      </Typography>
+      <User />
+    </Navbar>
   );
 }
