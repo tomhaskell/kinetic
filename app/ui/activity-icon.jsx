@@ -5,7 +5,7 @@ import { bikeIndoor } from '@/app/ui/icons';
 export function ActivityIcon({ activity }) {
   var path = mdiHeart;
   var color = 'black-500';
-  switch (activity.type) {
+  switch (activity.sport_type) {
     case 'Ride':
       if (activity.trainer) {
         path = bikeIndoor;

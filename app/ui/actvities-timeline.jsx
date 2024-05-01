@@ -10,20 +10,24 @@ import {
 import { getActivities } from '../api/activities';
 import { unstable_noStore as noStore } from 'next/cache.js';
 import { ActivityIcon } from './activity-icon';
-import { Distance, Time } from './stats';
+import { Distance, Kudos, Stats, Time } from './stats';
 
 export async function ActivitiesTimeline() {
   noStore();
   const activities = await getActivities();
   const activitiesByDate = {};
   activities.forEach((activity) => {
-    if (!activitiesByDate.hasOwnProperty(activity.start_date)) {
-      activitiesByDate[activity.start_date] = {
-        date: activity.start_date,
+    const d = Intl.DateTimeFormat('en-GB', {
+      dateStyle: 'short',
+    }).format(Date.parse(activity.start_date));
+
+    if (!activitiesByDate.hasOwnProperty(d)) {
+      activitiesByDate[d] = {
+        date: d,
         activities: [],
       };
     }
-    activitiesByDate[activity.start_date].activities.push(activity);
+    activitiesByDate[d].activities.push(activity);
   });
 
   return (
@@ -34,41 +38,34 @@ export async function ActivitiesTimeline() {
             <TimelineConnector className="!h-full !w-[76px]" />
             <div>
               <Typography variant="h6" className="pl-20 pt-4 font-normal">
-                {Intl.DateTimeFormat('en-GB', {
-                  dateStyle: 'short',
-                }).format(Date.parse(actDay.date))}
+                {actDay.date}
               </Typography>
             </div>
             {actDay.activities.map((activity) => (
               <TimelineHeader
                 key={activity.id}
-                className="relative rounded-xl border border-slate-700 bg-slate-500 py-3 pl-3 pr-8 shadow-lg"
+                className="relative max-w-[500px] items-start rounded-xl border border-slate-700 bg-slate-500 py-3 pl-3 pr-8 shadow-lg"
               >
-                <TimelineIcon className="p-3" variant="ghost">
-                  <ActivityIcon activity={activity} />
-                </TimelineIcon>
+                <div className="flex flex-col gap-2">
+                  <span className="text-center">
+                    {Intl.DateTimeFormat('en-GB', {
+                      timeStyle: 'short',
+                    }).format(Date.parse(activity.start_date))}
+                  </span>
+                  <TimelineIcon className="p-3" variant="ghost">
+                    <ActivityIcon activity={activity} />
+                  </TimelineIcon>
+                </div>
                 <div className="flex flex-col gap-1">
-                  <Typography className="font-bold">{activity.name}</Typography>
-                  <div className="flex flex-row gap-2">
-                    <Distance value={activity.distance} />
-                    <Time time={activity.moving_time} />
+                  <div className="flex flex-row gap-4">
+                    <Typography className="font-bold">
+                      {activity.name}
+                    </Typography>
                   </div>
+                  <Stats activity={activity} />
                 </div>
               </TimelineHeader>
             ))}
-            {/* <TimelineIcon className="p-3" variant="ghost">
-                <ActivityIcon activity={activity} />
-              </TimelineIcon>
-              <div className="flex flex-col gap-1">
-                <div className="flex flex-row gap-4">
-                  <Typography variant="h6" color="slate">
-                    {activity.name}
-                  </Typography>
-                </div>
-                <Typography variant="small" className="font-normal">
-                  {Math.round(activity.distance / 100) / 10} km
-                </Typography>
-              </div> */}
           </TimelineItem>
         ))}
       </Timeline>
