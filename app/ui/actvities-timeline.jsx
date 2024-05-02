@@ -32,6 +32,7 @@ export async function ActivitiesTimeline() {
 
   return (
     <div>
+      <Typography variant="h2">Activity Feed</Typography>
       <Timeline>
         {Object.values(activitiesByDate).map((actDay) => (
           <TimelineItem key={actDay.date}>

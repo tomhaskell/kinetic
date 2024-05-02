@@ -1,7 +1,7 @@
 import { Typography } from '@material-tailwind/react';
 import {
-  mdiBikePedal,
   mdiBikePedalClipless,
+  mdiHeartPulse,
   mdiImageFilterHdr,
   mdiMapMarkerDistance,
   mdiShoePrint,
@@ -20,6 +20,7 @@ export function Stats({ activity }) {
       <Kudos count={activity.kudos_count} />
       <AvgSpeed speed={activity.average_speed} type={activity.sport_type} />
       <Cadence cadence={activity.average_cadence} type={activity.sport_type} />
+      <HeartRate bpm={activity.average_heartrate} />
     </div>
   );
 }
@@ -113,6 +114,14 @@ export function Cadence({ cadence, type }) {
   return (
     <StatCard icon={i} title="Cadence">
       {cadence}
+    </StatCard>
+  );
+}
+
+export function HeartRate({ bpm }) {
+  return (
+    <StatCard icon={mdiHeartPulse} title="Heart Rate">
+      {bpm}
     </StatCard>
   );
 }
