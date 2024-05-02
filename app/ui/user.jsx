@@ -1,7 +1,16 @@
 import { useContext } from 'react';
 import { AuthContext } from '@/app/auth-context';
 import Image from 'next/image';
-import { Tooltip } from '@material-tailwind/react';
+import {
+  Menu,
+  MenuHandler,
+  Button,
+  MenuList,
+  MenuItem,
+  Avatar,
+} from '@material-tailwind/react';
+import Icon from '@mdi/react';
+import { mdiLogout, mdiOpenInNew } from '@mdi/js';
 
 export default function User() {
   const { user, setUser } = useContext(AuthContext);
@@ -11,27 +20,41 @@ export default function User() {
   function login() {}
 
   function viewOnStrava() {
-    location.href = `https://www.strava.com/athletes/${user.id}`;
+    window.open(`https://www.strava.com/athletes/${user.id}`, '_blank');
   }
+
+  function logout() {}
 
   var userButton;
   if (user && user.id) {
     userButton = (
-      <Tooltip content="View on Strava.com">
-        <button
-          className="inline-flex items-center space-x-2 hover:underline"
-          onClick={viewOnStrava}
-        >
-          <span>
-            {user.firstname} {user.lastname}
-          </span>
-          <img
+      <Menu>
+        <MenuHandler>
+          <Avatar
+            variant="circular"
+            alt={`${user.firstname} ${user.lastname}`}
+            className="cursor-pointer p-0.5"
             src={user.profile_medium}
-            alt={user.firstName}
-            className="max-h-12"
+            withBorder={true}
+            color="white"
           />
-        </button>
-      </Tooltip>
+        </MenuHandler>
+        <MenuList>
+          <MenuItem
+            onClick={viewOnStrava}
+            className="flex items-center justify-between"
+          >
+            View on Strava
+            <Icon path={mdiOpenInNew} width={24} />
+          </MenuItem>
+          <MenuItem
+            onClick={logout}
+            className="flex items-center justify-between"
+          >
+            Logout <Icon path={mdiLogout} width={24} />
+          </MenuItem>
+        </MenuList>
+      </Menu>
     );
   } else {
     userButton = (
