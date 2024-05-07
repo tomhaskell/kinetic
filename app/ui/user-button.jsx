@@ -14,11 +14,14 @@ import { mdiLogout, mdiOpenInNew, mdiViewDashboard } from '@mdi/js';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
-export default function User() {
+export default function UserButton() {
   const router = useRouter();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   console.debug(session);
+  if (status == 'loading') {
+    return <div></div>;
+  }
 
   var userButton;
   if (session) {
@@ -68,9 +71,9 @@ export default function User() {
     );
   } else {
     userButton = (
-      <button onClick={() => signIn('strava')}>
+      <button onClick={() => signIn('strava', { callbackUrl: '/dashboard' })}>
         <Image
-          src="/btn_strava_connectwith_orange.png"
+          src="/btn_strava_connectwith_orange.svg"
           width={193}
           height={48}
           alt="Connect with Strava"
