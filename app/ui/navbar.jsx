@@ -1,4 +1,4 @@
-import Image from 'next/image';
+'use client';
 import User from './user';
 import { racingSansOne } from './fonts';
 import { Navbar, Typography } from '@material-tailwind/react';

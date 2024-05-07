@@ -1,5 +1,5 @@
-import { useContext } from 'react';
-import { AuthContext } from '@/app/auth-context';
+'use client';
+
 import Image from 'next/image';
 import {
   Menu,
@@ -10,45 +10,55 @@ import {
   Avatar,
 } from '@material-tailwind/react';
 import Icon from '@mdi/react';
-import { mdiLogout, mdiOpenInNew } from '@mdi/js';
+import { mdiLogout, mdiOpenInNew, mdiViewDashboard } from '@mdi/js';
+import { useSession, signIn, signOut } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 export default function User() {
-  const { user, setUser } = useContext(AuthContext);
+  const router = useRouter();
+  const { data: session } = useSession();
 
-  console.debug(user);
-
-  function login() {}
-
-  function viewOnStrava() {
-    window.open(`https://www.strava.com/athletes/${user.id}`, '_blank');
-  }
-
-  function logout() {}
+  console.debug(session);
 
   var userButton;
-  if (user && user.id) {
+  if (session) {
+    const user = session.user;
+
     userButton = (
       <Menu>
         <MenuHandler>
           <Avatar
             variant="circular"
-            alt={`${user.firstname} ${user.lastname}`}
+            alt={`${user.name}`}
             className="cursor-pointer p-0.5"
-            src={user.profile_medium}
+            src={user.image}
             withBorder={true}
             color="white"
           />
         </MenuHandler>
         <MenuList>
           <MenuItem
-            onClick={viewOnStrava}
+            className="flex items-center justify-between"
+            onClick={() => router.replace('/dashboard')}
+          >
+            My Dashboard
+            <Icon path={mdiViewDashboard} width={24} />
+          </MenuItem>
+          <MenuItem
+            onClick={() =>
+              window.open(
+                'https://www.strava.com/athletes/' + user.id,
+                '_blank',
+              )
+            }
             className="flex items-center justify-between"
           >
             View on Strava
             <Icon path={mdiOpenInNew} width={24} />
           </MenuItem>
+          <hr className="my-3" />
           <MenuItem
-            onClick={logout}
+            onClick={signOut}
             className="flex items-center justify-between"
           >
             Logout <Icon path={mdiLogout} width={24} />
@@ -58,7 +68,7 @@ export default function User() {
     );
   } else {
     userButton = (
-      <button onClick={login}>
+      <button onClick={() => signIn('strava')}>
         <Image
           src="/btn_strava_connectwith_orange.png"
           width={193}
