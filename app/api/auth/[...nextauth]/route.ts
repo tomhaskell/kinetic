@@ -16,14 +16,16 @@ const handler = NextAuth({
   callbacks: {
     jwt({ token, account, user }) {
       if (account) {
-        // persist the user id on login into the jwt
+        // persist the user id & access token on login into the jwt
         token.id = user?.id;
+        token.accessToken = account.access_token;
       }
       return token;
     },
     session({ session, token }) {
-      // persist the user id from the jwt (above) into the session
+      // persist the user id & access token from the jwt (above) into the session
       session.user.id = token.id;
+      session.accessToken = token.accessToken;
 
       return session;
     },

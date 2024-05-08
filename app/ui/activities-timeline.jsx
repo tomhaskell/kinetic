@@ -7,14 +7,16 @@ import {
   TimelineItem,
   Typography,
 } from '@material-tailwind/react';
-import { getActivities } from '../api/activities';
+import { getActivities } from '../lib/activities';
 import { unstable_noStore as noStore } from 'next/cache.js';
 import { ActivityIcon } from './activity-icon';
 import { Distance, Kudos, Stats, Time } from './stats';
+import { useSession } from 'next-auth/react';
 
 export async function ActivitiesTimeline() {
   noStore();
-  const activities = await getActivities();
+  const { data: session } = useSession();
+  const activities = await getActivities(session);
   const activitiesByDate = {};
   activities.forEach((activity) => {
     const d = Intl.DateTimeFormat('en-GB', {
